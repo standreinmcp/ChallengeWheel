@@ -1,7 +1,7 @@
-import { Dimensions, Platform } from "react-native";
-import { IOS } from "../constants";
+import {Dimensions, Platform} from 'react-native';
+import {IOS} from '../constants';
 
-const { width, height } = Dimensions.get("window");
+const {width, height} = Dimensions.get('window');
 
 const metrics = {
   horizontalLineHeight: 1,
@@ -109,15 +109,19 @@ const metrics = {
   size320: 320,
   size340: 340,
   size350: 350,
+  size360: 360,
   size400: 400,
+  size1000: 1000,
+  size2000: 2000,
+  size3600: 3600,
   zIndex: {
     z1: 1,
     z2: 2,
     z3: 3,
     z6: 6,
     z8: 8,
-    z10: 10
-  }
+    z10: 10,
+  },
 };
 
 export default metrics;

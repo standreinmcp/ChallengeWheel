@@ -1,0 +1,40 @@
+{
+  "data": [
+    {
+      "name": "Andrei",
+      "age": 21,
+      "doneShifts": 0,
+      "lastSelected": null
+    },
+    {
+      "name": "Andrei",
+      "age": 21,
+      "doneShifts": 0,
+      "lastSelected": null
+    },
+    {
+      "name": "Andrei1",
+      "age": 21,
+      "doneShifts": 0,
+      "lastSelected": null
+    },
+    {
+      "name": "Andrei2",
+      "age": 21,
+      "doneShifts": 0,
+      "lastSelected": null
+    },
+    {
+      "name": "Andrei3",
+      "age": 21,
+      "doneShifts": 0,
+      "lastSelected": null
+    },
+    {
+      "name": "Andrei4",
+      "age": 21,
+      "doneShifts": 0,
+      "lastSelected": null
+    }
+  ]
+}

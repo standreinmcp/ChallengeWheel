@@ -3,7 +3,7 @@ import {assign} from 'lodash-es';
 import {REQUEST_WORKERS} from '.';
 
 const INITIAL_STATE = {
-  workers: '',
+  workers: {},
 };
 
 export default (state = INITIAL_STATE, action) => {

@@ -1,22 +1,86 @@
-import React, {useState} from 'react';
-import {View, TouchableOpacity, Text, ScrollView, Image} from 'react-native';
+import React from 'react';
+import {
+  View,
+  TouchableOpacity,
+  Text,
+  ScrollView,
+  Animated,
+  Easing,
+} from 'react-native';
 import {connect} from 'react-redux';
 import {REQUEST_WORKERS} from './redux';
 import {strings} from '../../core/constants';
 import {wheelScreenStyles} from './styles';
 import {RoundedButton} from '../../core/components';
-import {arrow} from '../../core/themes';
+import {arrow, metrics} from '../../core/themes';
+import {PieChart} from 'react-native-svg-charts';
+import {workers} from '../../core/constants';
 
 const WheelScreen = () => {
+  const spinValue = new Animated.Value(0);
+
+  var toValue = metrics.size0;
+
+  const findOutPress = () => {
+    Animated.timing(spinValue, {
+      toValue: toValue + metrics.size1,
+      duration: metrics.size1000,
+      easing: Easing.circle,
+      useNativeDriver: true,
+    }).start(() => {
+      toValue = toValue + metrics.size1;
+      Animated.timing(spinValue, {
+        toValue: toValue + metrics.size1,
+        duration: metrics.size2000,
+        easing: Easing.out(Easing.circle),
+        useNativeDriver: true,
+      }).start();
+      toValue = toValue + metrics.size3;
+    });
+  };
+
+  const randomSpin = () => {
+    const randomNumber =
+      Math.floor(Math.random() * (metrics.size3600 - metrics.size360)) +
+      metrics.size3600;
+    return `${randomNumber.toString() + 'deg'}`;
+  };
+
+  const spin = {
+    transform: [
+      {
+        rotate: spinValue.interpolate({
+          inputRange: [
+            toValue,
+            toValue + metrics.size1,
+            toValue + metrics.size2,
+          ],
+          outputRange: [
+            strings.startingPoint,
+            strings.fullCircleSpin,
+            randomSpin(),
+          ],
+        }),
+      },
+    ],
+  };
+
   return (
     <ScrollView
       style={wheelScreenStyles.container}
       contentContainerStyle={wheelScreenStyles.contentContainer}>
       <View style={wheelScreenStyles.circleContainer}>
-        <Image source={arrow} style={wheelScreenStyles.arrowImage} />
+        <PieChart />
+        <Animated.Image
+          source={arrow}
+          style={[wheelScreenStyles.arrowImage, spin]}
+        />
       </View>
       <View style={wheelScreenStyles.bottomContainer}>
-        <RoundedButton text={strings.buttonText} />
+        <RoundedButton
+          text={strings.buttonText}
+          onPress={() => findOutPress()}
+        />
         <TouchableOpacity style={wheelScreenStyles.listButtonContainer}>
           <Text style={wheelScreenStyles.listButtonText}>
             {strings.listText}
