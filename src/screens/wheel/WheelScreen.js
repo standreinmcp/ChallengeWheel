@@ -8,13 +8,13 @@ import {
   Easing,
 } from 'react-native';
 import {connect} from 'react-redux';
+import {PieChart} from 'react-native-svg-charts';
 import {REQUEST_WORKERS} from './redux';
 import {strings} from '../../core/constants';
 import {wheelScreenStyles} from './styles';
-import {RoundedButton} from '../../core/components';
+import {RoundedButton, PieLabel} from '../../core/components';
 import {arrow, metrics} from '../../core/themes';
-import {PieChart} from 'react-native-svg-charts';
-import {workers} from '../../core/constants';
+import {workers, data} from '../../core/constants';
 
 const WheelScreen = () => {
   const spinValue = new Animated.Value(0);
@@ -70,12 +70,19 @@ const WheelScreen = () => {
       style={wheelScreenStyles.container}
       contentContainerStyle={wheelScreenStyles.contentContainer}>
       <View style={wheelScreenStyles.circleContainer}>
-        <PieChart />
         <Animated.Image
           source={arrow}
           style={[wheelScreenStyles.arrowImage, spin]}
         />
       </View>
+      <PieChart
+        style={wheelScreenStyles.pieChart}
+        valueAccessor={({item}) => item.amount}
+        data={data}
+        spacing={metrics.size0}
+        outerRadius={'95%'}>
+        <PieLabel />
+      </PieChart>
       <View style={wheelScreenStyles.bottomContainer}>
         <RoundedButton
           text={strings.buttonText}

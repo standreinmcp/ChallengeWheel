@@ -43,4 +43,8 @@ export default StyleSheet.create({
     height: metrics.size35,
     width: metrics.size35,
   },
+  pieChart: {
+    height: metrics.size300,
+    width: metrics.size300,
+  },
 });
