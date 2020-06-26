@@ -15,10 +15,9 @@ export default StyleSheet.create({
     marginTop: metrics.size25,
     justifyContent: 'center',
     alignItems: 'center',
-    height: metrics.size200,
-    width: metrics.size200,
-    borderRadius: metrics.size200 / 2,
-    backgroundColor: colors.redOrange,
+    height: metrics.size300,
+    width: metrics.size300,
+    borderRadius: metrics.size300 / 2,
   },
 
   bottomContainer: {
@@ -40,10 +39,12 @@ export default StyleSheet.create({
   },
 
   arrowImage: {
-    height: metrics.size35,
-    width: metrics.size35,
+    height: metrics.size200,
+    width: metrics.size200,
+    zIndex: metrics.size20,
   },
   pieChart: {
+    position: 'absolute',
     height: metrics.size300,
     width: metrics.size300,
   },

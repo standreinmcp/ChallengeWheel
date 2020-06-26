@@ -1,18 +1,6 @@
 {
   "data": [
     {
-      "name": "Andrei",
-      "age": 21,
-      "doneShifts": 0,
-      "lastSelected": null
-    },
-    {
-      "name": "Andrei",
-      "age": 21,
-      "doneShifts": 0,
-      "lastSelected": null
-    },
-    {
       "name": "Andrei1",
       "age": 21,
       "doneShifts": 0,
@@ -32,6 +20,42 @@
     },
     {
       "name": "Andrei4",
+      "age": 21,
+      "doneShifts": 0,
+      "lastSelected": null
+    },
+    {
+      "name": "Andrei5",
+      "age": 21,
+      "doneShifts": 0,
+      "lastSelected": null
+    },
+    {
+      "name": "Andrei6",
+      "age": 21,
+      "doneShifts": 0,
+      "lastSelected": null
+    },
+    {
+      "name": "Andrei7",
+      "age": 21,
+      "doneShifts": 0,
+      "lastSelected": null
+    },
+    {
+      "name": "Andrei8",
+      "age": 21,
+      "doneShifts": 0,
+      "lastSelected": null
+    },
+    {
+      "name": "Andrei9",
+      "age": 21,
+      "doneShifts": 0,
+      "lastSelected": null
+    },
+    {
+      "name": "Andrei10",
       "age": 21,
       "doneShifts": 0,
       "lastSelected": null

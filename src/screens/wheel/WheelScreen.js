@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useCallback, useEffect} from 'react';
 import {
   View,
   TouchableOpacity,
@@ -13,13 +13,18 @@ import {REQUEST_WORKERS} from './redux';
 import {strings} from '../../core/constants';
 import {wheelScreenStyles} from './styles';
 import {RoundedButton, PieLabel} from '../../core/components';
-import {arrow, metrics} from '../../core/themes';
+import {arrow, metrics, colors} from '../../core/themes';
 import {workers, data} from '../../core/constants';
+import {randomSpin} from '../../core/helperFunctions';
+
+const firstResult = randomSpin();
+console.log(firstResult, 'first rez');
 
 const WheelScreen = () => {
   const spinValue = new Animated.Value(0);
-
   var toValue = metrics.size0;
+  const [random, setRandom] = useState(firstResult.random);
+  const [winnerIndex, setWinnerIndex] = useState(firstResult.winnerIndex);
 
   const findOutPress = () => {
     Animated.timing(spinValue, {
@@ -34,16 +39,16 @@ const WheelScreen = () => {
         duration: metrics.size2000,
         easing: Easing.out(Easing.circle),
         useNativeDriver: true,
-      }).start();
+      }).start(() => {
+        console.log(winnerIndex);
+        data[winnerIndex].svg.fill = colors.shuttleGrey;
+        const result = randomSpin();
+        console.log(result, 'result another');
+        setRandom(result.random);
+        setWinnerIndex(result.winnerIndex);
+      });
       toValue = toValue + metrics.size3;
     });
-  };
-
-  const randomSpin = () => {
-    const randomNumber =
-      Math.floor(Math.random() * (metrics.size3600 - metrics.size360)) +
-      metrics.size3600;
-    return `${randomNumber.toString() + 'deg'}`;
   };
 
   const spin = {
@@ -55,11 +60,7 @@ const WheelScreen = () => {
             toValue + metrics.size1,
             toValue + metrics.size2,
           ],
-          outputRange: [
-            strings.startingPoint,
-            strings.fullCircleSpin,
-            randomSpin(),
-          ],
+          outputRange: [strings.startingPoint, strings.fullCircleSpin, random],
         }),
       },
     ],
@@ -70,19 +71,17 @@ const WheelScreen = () => {
       style={wheelScreenStyles.container}
       contentContainerStyle={wheelScreenStyles.contentContainer}>
       <View style={wheelScreenStyles.circleContainer}>
+        <PieChart
+          style={wheelScreenStyles.pieChart}
+          valueAccessor={({item}) => item.amount}
+          data={data}>
+          <PieLabel />
+        </PieChart>
         <Animated.Image
           source={arrow}
           style={[wheelScreenStyles.arrowImage, spin]}
         />
       </View>
-      <PieChart
-        style={wheelScreenStyles.pieChart}
-        valueAccessor={({item}) => item.amount}
-        data={data}
-        spacing={metrics.size0}
-        outerRadius={'95%'}>
-        <PieLabel />
-      </PieChart>
       <View style={wheelScreenStyles.bottomContainer}>
         <RoundedButton
           text={strings.buttonText}

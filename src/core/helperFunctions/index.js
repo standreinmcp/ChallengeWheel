@@ -1,0 +1,1 @@
+export {randomSpin} from './randomGenerator';

@@ -68,6 +68,7 @@ const metrics = {
   size40: 40,
   size41: 41,
   size43: 43,
+  size45: 45,
   size47: 47,
   size50: 50,
   size55: 55,
