@@ -1,9 +1,9 @@
 import produce from 'immer';
-import {assign} from 'lodash-es';
-import {REQUEST_WORKERS} from '.';
+import { assign } from 'lodash-es';
+import { REQUEST_WORKERS, UPDATE_WORKERS } from '.';
 
 const INITIAL_STATE = {
-  workers: {},
+  workersStore: {},
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -11,7 +11,13 @@ export default (state = INITIAL_STATE, action) => {
     case REQUEST_WORKERS:
       return produce(state, (nextState) =>
         assign(nextState, {
-          workers: action.response,
+          workersStore: action.payload,
+        }),
+      );
+    case UPDATE_WORKERS:
+      return produce(state, (nextState) =>
+        assign(nextState, {
+          workersStore: action.payload,
         }),
       );
 

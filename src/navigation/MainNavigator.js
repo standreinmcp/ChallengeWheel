@@ -1,11 +1,11 @@
 import 'react-native-gesture-handler';
 import React from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
-import {NavigationContainer} from '@react-navigation/native';
-import {roots} from '.';
-import {strings} from '../core/constants';
-import {WheelScreen} from '../screens/wheel';
-import {mainNavigatorStyles} from './styles';
+import { createStackNavigator } from '@react-navigation/stack';
+import { NavigationContainer } from '@react-navigation/native';
+import { roots } from '.';
+import { strings } from '../core/constants';
+import { WheelScreen } from '../screens/wheel';
+import { mainNavigatorStyles } from './styles';
 
 const Stack = createStackNavigator();
 

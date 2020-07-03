@@ -1,1 +1,1 @@
-export {watchWorkerRequest} from './actions';
+export { watchWorkerRequest, updateWorkersRequest } from './actions';

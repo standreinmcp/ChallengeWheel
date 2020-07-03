@@ -1,9 +1,15 @@
-import {createStore, combineReducers, applyMiddleware} from 'redux';
-import {persistStore, persistReducer} from 'redux-persist';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { persistStore, persistReducer } from 'redux-persist';
 import createSagaMiddleware from 'redux-saga';
-import {reducer as workerReducer} from '../screens/wheel/redux';
-import {watchWorkerRequest} from '../screens/wheel/saga';
+import { reducer as workerReducer } from '../screens/wheel/redux';
+import { watchWorkerRequest, updateWorkersRequest } from '../screens/wheel/saga';
 import AsyncStorage from '@react-native-community/async-storage';
+import { spawn } from 'redux-saga/effects';
+
+function* rootSaga() {
+  yield spawn(watchWorkerRequest);
+  yield spawn(updateWorkersRequest);
+}
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -19,10 +25,7 @@ const persistConfig = {
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-export const store = createStore(
-  persistedReducer,
-  applyMiddleware(sagaMiddleware),
-);
+export const store = createStore(persistedReducer, applyMiddleware(sagaMiddleware));
 
 export const persistor = persistStore(store);
-sagaMiddleware.run(watchWorkerRequest);
+sagaMiddleware.run(rootSaga);

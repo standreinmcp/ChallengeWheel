@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "267493390016",
+    "firebase_url": "https://challengewheel-4956d.firebaseio.com",
+    "project_id": "challengewheel-4956d",
+    "storage_bucket": "challengewheel-4956d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:267493390016:android:0e848a17534e875ac35f25",
+        "android_client_info": {
+          "package_name": "com.challengeShift"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "267493390016-9u6arnm56709snpq6nqt3sev4fm1uq1k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEsx9msip4UYepML_m3T7lFpiO1pldYtA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "267493390016-9u6arnm56709snpq6nqt3sev4fm1uq1k.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "267493390016-d5i5dvtasq5s3pljidq43a0v9md2eg6f.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.nmcp.challengeWheel"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

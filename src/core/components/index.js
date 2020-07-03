@@ -1,2 +1,2 @@
-export {default as RoundedButton} from './RoundedButton';
-export {default as PieLabel} from './PieLabel';
+export { default as RoundedButton } from './RoundedButton';
+export { default as PieLabel } from './PieLabel';
