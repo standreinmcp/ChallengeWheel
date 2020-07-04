@@ -2,13 +2,14 @@ import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { persistStore, persistReducer } from 'redux-persist';
 import createSagaMiddleware from 'redux-saga';
 import { reducer as workerReducer } from '../screens/wheel/redux';
-import { watchWorkerRequest, updateWorkersRequest } from '../screens/wheel/saga';
+import { watchWorkerRequest, updateWorkersRequest, resetListWatcher } from '../screens/wheel/saga';
 import AsyncStorage from '@react-native-community/async-storage';
 import { spawn } from 'redux-saga/effects';
 
 function* rootSaga() {
   yield spawn(watchWorkerRequest);
   yield spawn(updateWorkersRequest);
+  yield spawn(resetListWatcher);
 }
 
 const sagaMiddleware = createSagaMiddleware();

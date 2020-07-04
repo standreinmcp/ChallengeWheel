@@ -4,6 +4,7 @@ import { REQUEST_WORKERS, UPDATE_WORKERS } from '.';
 
 const INITIAL_STATE = {
   workersStore: {},
+  updatedWorkers: false,
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -17,7 +18,7 @@ export default (state = INITIAL_STATE, action) => {
     case UPDATE_WORKERS:
       return produce(state, (nextState) =>
         assign(nextState, {
-          workersStore: action.payload,
+          updatedWorkers: action.payload,
         }),
       );
 

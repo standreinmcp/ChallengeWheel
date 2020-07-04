@@ -1,7 +1,7 @@
-import { put, takeLatest } from 'redux-saga/effects';
-import { REQUEST_WORKERS, REQUEST_WORKERS_WATCHER, UPDATE_WORKERS_WATCHER, UPDATE_WORKERS } from '../redux';
+import { put, takeLatest, call } from 'redux-saga/effects';
+import { REQUEST_WORKERS, REQUEST_WORKERS_WATCHER, UPDATE_WORKERS_WATCHER, RESET_LIST } from '../redux';
 import { workers } from '../../../core/constants';
-
+import { resetEmployeesList, fetchEmployees, updateEmployee } from '../../../core/helperFunctions';
 //worker saga
 function* wheelRequest() {
   try {
@@ -19,9 +19,10 @@ export function* watchWorkerRequest() {
 }
 
 function* updateWorkers(action) {
-  console.log(action.payload, 'sagas');
+  updateEmployee(action.payload);
   try {
-    yield put({ type: UPDATE_WORKERS, payload: action.payload });
+    const data = yield call(fetchEmployees);
+    yield put({ type: REQUEST_WORKERS, payload: data });
   } catch (error) {
     console.log(error);
   }
@@ -29,4 +30,18 @@ function* updateWorkers(action) {
 
 export function* updateWorkersRequest() {
   yield takeLatest(UPDATE_WORKERS_WATCHER, updateWorkers);
+}
+
+function* resetList() {
+  try {
+    yield call(resetEmployeesList);
+    const employees = yield call(fetchEmployees);
+    yield put({ type: REQUEST_WORKERS, payload: employees });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export function* resetListWatcher() {
+  yield takeLatest(RESET_LIST, resetList);
 }

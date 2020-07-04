@@ -2,26 +2,39 @@ import React, { useState, useEffect } from 'react';
 import { View, TouchableOpacity, Text, ScrollView, Animated, Easing } from 'react-native';
 import { connect } from 'react-redux';
 import { PieChart } from 'react-native-svg-charts';
-import { UPDATE_WORKERS_WATCHER, REQUEST_WORKERS_WATCHER } from './redux';
+import { UPDATE_WORKERS_WATCHER, REQUEST_WORKERS_WATCHER, RESET_LIST } from './redux';
 import { wheelScreenStyles } from './styles';
 import { RoundedButton, PieLabel } from '../../core/components';
 import { arrow, metrics, colors } from '../../core/themes';
 import { data, strings } from '../../core/constants';
-import { randomSpin, resetList } from '../../core/helperFunctions';
+import { randomSpin } from '../../core/helperFunctions';
 import firestore from '@react-native-firebase/firestore';
 
-const WheelScreen = ({ requestWorkers, workersStore, updateWorkers }) => {
+const WheelScreen = ({ updateWorkers, workersStore, resetList }) => {
   const spinValue = new Animated.Value(0);
   var toValue = metrics.size0;
-  const [state, setState] = useState(randomSpin());
+
+  const [workers, setWorkers] = useState();
+  const [state, setState] = useState();
   const [winner, setWinner] = useState();
-  const [workers, setWorkers] = useState(workersStore);
+
+  useEffect(() => {
+    const setValues = async () => {
+      const response = await randomSpin();
+      setState(response);
+    };
+    setValues();
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
       const db = firestore();
-      const data = await db.collection('employees').get();
-      console.log(data);
+      const employeesCollection = await db.collection('employees').get();
+      const employees = {
+        data: [],
+      };
+      employeesCollection.docs.map((item) => employees.data.push(item._data));
+      setWorkers(employees);
     };
     fetchData();
   }, []);
@@ -39,14 +52,12 @@ const WheelScreen = ({ requestWorkers, workersStore, updateWorkers }) => {
         duration: metrics.size2000,
         easing: Easing.out(Easing.circle),
         useNativeDriver: true,
-      }).start(() => {
+      }).start(async () => {
         setWinner(state.winnerIndex);
-        var updatedWorkers = JSON.parse(JSON.stringify(workers));
-        updatedWorkers.data[state.winnerIndex].lastSelected = Date.now();
-        updatedWorkers.data[state.winnerIndex].doneShifts += 1;
-        console.log(updatedWorkers, 'updated');
-        updateWorkers(updatedWorkers);
-        setState(randomSpin());
+        updateWorkers(state.winnerIndex);
+        setWorkers(workersStore);
+        const result = await randomSpin();
+        setState(result);
       });
       toValue = toValue + metrics.size3;
       data[state.winnerIndex].svg.fill = colors.shuttleGrey;
@@ -58,7 +69,11 @@ const WheelScreen = ({ requestWorkers, workersStore, updateWorkers }) => {
       {
         rotate: spinValue.interpolate({
           inputRange: [toValue, toValue + metrics.size1, toValue + metrics.size2],
-          outputRange: [strings.startingPoint, strings.fullCircleSpin, state.random !== 'NaNdeg' ? state.random : '3601deg'],
+          outputRange: [
+            strings.startingPoint,
+            strings.fullCircleSpin,
+            state?.random !== 'NaNdeg' ? (state?.random ? state.random : '3601deg') : '3601deg',
+          ],
         }),
       },
     ],
@@ -81,12 +96,20 @@ const WheelScreen = ({ requestWorkers, workersStore, updateWorkers }) => {
         <RoundedButton
           text={strings.buttonText}
           onPress={() => {
-            if (state.spin !== false) {
+            if (state?.spin !== false) {
               animation();
             }
           }}
         />
-        <TouchableOpacity style={wheelScreenStyles.listButtonContainer} onPress={() => resetList()}>
+        <TouchableOpacity
+          style={wheelScreenStyles.listButtonContainer}
+          onPress={() => {
+            setState(workersStore);
+            resetList();
+            for (let index = 0; index < workers.data.length; index++) {
+              data[index].svg.fill = colors.redOrange;
+            }
+          }}>
           <Text style={wheelScreenStyles.listButtonText}>{strings.resetList}</Text>
         </TouchableOpacity>
       </View>
@@ -102,6 +125,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
   requestWorkers: () => dispatch({ type: REQUEST_WORKERS_WATCHER }),
   updateWorkers: (updatedWorkers) => dispatch({ type: UPDATE_WORKERS_WATCHER, payload: updatedWorkers }),
+  resetList: () => dispatch({ type: RESET_LIST }),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(WheelScreen);
