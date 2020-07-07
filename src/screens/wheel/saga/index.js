@@ -1,1 +1,1 @@
-export { watchWorkerRequest, updateWorkersRequest, resetListWatcher } from './actions';
+export { setWorkersWatcher, updateWorkersRequest, resetListWatcher } from './actions';

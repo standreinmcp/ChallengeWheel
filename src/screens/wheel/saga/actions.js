@@ -1,30 +1,31 @@
 import { put, takeLatest, call } from 'redux-saga/effects';
-import { REQUEST_WORKERS, REQUEST_WORKERS_WATCHER, UPDATE_WORKERS_WATCHER, RESET_LIST } from '../redux';
-import { workers } from '../../../core/constants';
+import { SET_WORKERS, SET_WORKERS_WATCHER, UPDATE_WORKERS_WATCHER, RESET_LIST, UPDATE_WORKERS_RESPONSE, SET_WORKERS_RESPONSE, RESET_LIST_RESPONSE } from '../redux';
 import { resetEmployeesList, fetchEmployees, updateEmployee } from '../../../core/helperFunctions';
+
 //worker saga
-function* wheelRequest() {
+function* setWorkers() {
   try {
-    //yield put({ type: IS_REQUESTING, payload: true });
-    // const response = yield call(requestWorkers);
-    yield put({ type: REQUEST_WORKERS, payload: workers });
+    const data = yield call(fetchEmployees);
+    yield put({ type: SET_WORKERS, payload: data });
+    yield put({ type: SET_WORKERS_RESPONSE, payload: 'success' });
   } catch (error) {
-    //yield put({ type: IS_REQUESTING, payload: true });
+    yield put({ type: SET_WORKERS_RESPONSE, payload: 'failure' });
   }
 }
 
 //watcher saga
-export function* watchWorkerRequest() {
-  yield takeLatest(REQUEST_WORKERS_WATCHER, wheelRequest);
+export function* setWorkersWatcher() {
+  yield takeLatest(SET_WORKERS_WATCHER, setWorkers);
 }
 
 function* updateWorkers(action) {
-  updateEmployee(action.payload);
   try {
+    yield call(updateEmployee, action.payload);
     const data = yield call(fetchEmployees);
-    yield put({ type: REQUEST_WORKERS, payload: data });
+    yield put({ type: SET_WORKERS, payload: data });
+    yield put({ type: UPDATE_WORKERS_RESPONSE, payload: 'success' });
   } catch (error) {
-    console.log(error);
+    yield put({ type: UPDATE_WORKERS_RESPONSE, payload: 'failure' });
   }
 }
 
@@ -36,9 +37,10 @@ function* resetList() {
   try {
     yield call(resetEmployeesList);
     const employees = yield call(fetchEmployees);
-    yield put({ type: REQUEST_WORKERS, payload: employees });
+    yield put({ type: SET_WORKERS, payload: employees });
+    yield put({ type: RESET_LIST_RESPONSE, payload: 'success' });
   } catch (error) {
-    console.log(error);
+    yield put({ type: RESET_LIST_RESPONSE, payload: 'failure' });
   }
 }
 

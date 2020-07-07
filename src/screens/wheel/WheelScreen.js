@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, TouchableOpacity, Text, ScrollView, Animated, Easing } from 'react-native';
 import { connect } from 'react-redux';
 import { PieChart } from 'react-native-svg-charts';
-import { UPDATE_WORKERS_WATCHER, REQUEST_WORKERS_WATCHER, RESET_LIST } from './redux';
+import { UPDATE_WORKERS_WATCHER, RESET_LIST, SET_WORKERS } from './redux';
 import { wheelScreenStyles } from './styles';
 import { RoundedButton, PieLabel } from '../../core/components';
 import { arrow, metrics, colors } from '../../core/themes';
@@ -10,11 +10,10 @@ import { data, strings } from '../../core/constants';
 import { randomSpin } from '../../core/helperFunctions';
 import firestore from '@react-native-firebase/firestore';
 
-const WheelScreen = ({ updateWorkers, workersStore, resetList }) => {
+const WheelScreen = ({ updateWorkers, workersStore, resetList, setWorkers }) => {
   const spinValue = new Animated.Value(0);
   var toValue = metrics.size0;
 
-  const [workers, setWorkers] = useState();
   const [state, setState] = useState();
   const [winner, setWinner] = useState();
 
@@ -26,16 +25,17 @@ const WheelScreen = ({ updateWorkers, workersStore, resetList }) => {
     setValues();
   }, []);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const db = firestore();
-      const employeesCollection = await db.collection('employees').get();
-      const employees = {
-        data: [],
-      };
-      employeesCollection.docs.map((item) => employees.data.push(item._data));
-      setWorkers(employees);
+  const fetchData = useCallback(async () => {
+    const db = firestore();
+    const employeesCollection = await db.collection('employees').get();
+    const employees = {
+      data: [],
     };
+    employeesCollection.docs.map((item) => employees.data.push(item._data));
+    setWorkers(employees);
+  }, []);
+
+  useEffect(() => {
     fetchData();
   }, []);
 
@@ -55,7 +55,6 @@ const WheelScreen = ({ updateWorkers, workersStore, resetList }) => {
       }).start(async () => {
         setWinner(state.winnerIndex);
         updateWorkers(state.winnerIndex);
-        setWorkers(workersStore);
         const result = await randomSpin();
         setState(result);
       });
@@ -89,7 +88,8 @@ const WheelScreen = ({ updateWorkers, workersStore, resetList }) => {
       </View>
       {!!winner && (
         <View style={wheelScreenStyles.winnerContainer}>
-          <Text>{`${workers.data[winner].name}`}</Text>
+                    <Text style={wheelScreenStyles.congratsText}>{strings.congratulations}</Text>
+          <Text style={wheelScreenStyles.winnerText}><Text style={wheelScreenStyles.winnerLabel}>{strings.winner}</Text>{`${workersStore.data[winner].name}`}</Text>
         </View>
       )}
       <View style={wheelScreenStyles.bottomContainer}>
@@ -104,11 +104,12 @@ const WheelScreen = ({ updateWorkers, workersStore, resetList }) => {
         <TouchableOpacity
           style={wheelScreenStyles.listButtonContainer}
           onPress={() => {
-            setState(workersStore);
             resetList();
-            for (let index = 0; index < workers.data.length; index++) {
+            fetchData();
+            for (let index = 0; index < workersStore.data.length; index++) {
               data[index].svg.fill = colors.redOrange;
             }
+            setWinner(null);
           }}>
           <Text style={wheelScreenStyles.listButtonText}>{strings.resetList}</Text>
         </TouchableOpacity>
@@ -123,8 +124,8 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  requestWorkers: () => dispatch({ type: REQUEST_WORKERS_WATCHER }),
   updateWorkers: (updatedWorkers) => dispatch({ type: UPDATE_WORKERS_WATCHER, payload: updatedWorkers }),
+  setWorkers: (workers) => dispatch({ type: SET_WORKERS, payload: workers }),
   resetList: () => dispatch({ type: RESET_LIST }),
 });
 

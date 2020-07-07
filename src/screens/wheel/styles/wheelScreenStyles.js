@@ -10,7 +10,6 @@ export default StyleSheet.create({
     flexGrow: metrics.size1,
     alignItems: 'center',
   },
-
   circleContainer: {
     marginTop: metrics.size25,
     justifyContent: 'center',
@@ -19,7 +18,21 @@ export default StyleSheet.create({
     width: metrics.size300,
     borderRadius: metrics.size300 / 2,
   },
-
+  winnerContainer: {
+    marginTop: metrics.size50, 
+  },  
+  winnerText: { 
+    fontSize: metrics.size20, 
+    color: colors.redOrange
+  },
+  winnerLabel: { 
+    fontSize: metrics.size20, 
+    color: colors.midnight
+  },
+  congratsText:{ 
+    fontSize: metrics.size25, 
+    marginBottom: metrics.size5, 
+  }, 
   bottomContainer: {
     width: '100%',
     flex: metrics.size1,
@@ -39,8 +52,8 @@ export default StyleSheet.create({
   },
 
   arrowImage: {
-    height: metrics.size200,
-    width: metrics.size200,
+    height: metrics.size50,
+    width: metrics.size50,
     zIndex: metrics.size20,
   },
   pieChart: {
